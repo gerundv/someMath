@@ -1,0 +1,5 @@
+# someMath
+E. Y. Panov
+
+BASIC ALGORITHMS
+NUMERICAL METHODS

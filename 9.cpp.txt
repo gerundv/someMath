@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+struct Vect {
+    float x, y;
+};
+
+void function(float x, Vect y, Vect &f) {
+    f.x = y.x - y.y;
+    f.y = -4 * y.x + y.y;
+}
+
+float realFunctionY(float x) {
+    return 1 / 2.0f * std::exp(3 * x) + 1 / 2.0f * std::exp(-x);
+}
+
+float realFunctionX(float x) {
+    return - 1 / 4.0f * std::exp(3 * x) + 1 / 4.0f * std::exp(-x);
+}
+
+int main() {
+    float x, h;
+    Vect y;
+    Vect y1{0, 0};
+    Vect f;
+    Vect k1;
+    Vect k2;
+    Vect k3;
+    Vect k4;
+    h = 0.05f;
+
+    //float xx = 0;
+
+    x = 0;
+    y.x = 0;
+    y.y = 1;
+
+    const int N = 10;
+    std::cout << "Iter." << "\t|\t" << "yRungeMod" << "\t|\t" << "xRungeMod" << "\t|\t" << "realY" << "\t|\t" << "realX" << "\t|" << std::endl;
+    std::cout << "---------------------------------------------------------" << std::endl;
+    for (int i = 0; i < N; i++) {
+        std::cout << i << "\t|\t";
+        std::cout << y.y << "\t|\t";
+        std::cout << y.x << "\t|\t";
+        std::cout << realFunctionY(x) << "\t|\t";
+        std::cout << realFunctionX(x) << "\t|\t";
+       
+        function(x, y, f);
+        k1.x = f.x * h;
+        k1.y = f.y * h;
+        x += h / 2.0f;
+        y1.x = y.x + k1.x / 2.0f;
+        y1.y = y.y + k1.y / 2.0f;
+        function(x, y1, f);
+        k2.x = f.x * h;
+        k2.y = f.y * h;
+        y1.x = y.x + k2.x / 2.0f;
+        y1.y = y.y + k2.y / 2.0f;
+        function(x, y1, f);
+        k3.x = f.x * h;
+        k3.y = f.y * h;
+        x += h / 2.0f;
+        y1.x = y.x + k3.x;
+        y1.y = y.y + k3.y;
+        function(x, y1, f);
+        k4.x = f.x * h;
+        k4.y = f.y * h;
+        y.x += (k1.x + 2 * k2.x + 2 * k3.x + k4.x) / 6.0f;
+        y.y += (k1.y + 2 * k2.y + 2 * k3.y + k4.y) / 6.0f;
+
+        //std::cout << y.x << "\t\t|\t";
+        //xx += h / 2.0f;
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
